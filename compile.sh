@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Ask the user for the folder path
-echo "Enter the folder path:"
-read USERINPUT_FOLDER
+# Set the folder path from the argument, default to current directory if not provided
+USERINPUT_FOLDER="${1:-.}"
 
 # Check if the folder exists
 if [ ! -d "$USERINPUT_FOLDER" ]; then
@@ -11,7 +10,7 @@ if [ ! -d "$USERINPUT_FOLDER" ]; then
 fi
 
 # Activate PlatformIO virtual environment
-source /home/iotpolimi/.platformio/penv/bin/activate
+source ~/.platformio/penv/bin/activate
 
 # Change to the specified directory
 cd "$USERINPUT_FOLDER" || exit
