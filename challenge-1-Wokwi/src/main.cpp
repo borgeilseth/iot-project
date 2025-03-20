@@ -49,7 +49,7 @@ void setup()
   // Initialize
   Serial.begin(115200);
   Serial.println("\n--------------------------------");
-  Serial.println("idle, wifi_on, sensor_reading, transmission, distance");
+  Serial.println("idle, sensor, wifi_on, transmission, distance");
 
   // Initialize the sensor
   pinMode(TRIG_PIN, OUTPUT);
