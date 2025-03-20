@@ -15,6 +15,7 @@
 #define uS_TO_S_FACTOR 1000000
 #define TIME_TO_SLEEP 31
 
+// Define an initial timestamp
 unsigned long startIdle = micros();
 
 // Define the MAC address of the central sink node
@@ -23,14 +24,13 @@ uint8_t broadcastAddress[] = {0x8C, 0xAA, 0xB5, 0x84, 0xFB, 0x90};
 // Create peer interface
 esp_now_peer_info_t peerInfo;
 
-// deep sleep = 31s, idle = ca 42009us, wifi on = ca 220906us, sensor_reading = 23528us, transmission time = ca 497us
-
 // state transitions:
-// off/deep_sleep -> idle (booting) -> wifi_on -> sensor_reading -> transmission -> deep_sleep
+// off/deep_sleep -> idle (booting) -> sensor_reading -> wifi_on -> transmission -> deep_sleep
 
-// Timing printout order:
-// idle, wifi_on, sensor_reading, transmission
+// Timing printout format (comma-separated):
+// idle, sensor, wifi_on, transmission, distance - timestamps in microseconds, distance in cm
 
+// Function to measure the distance
 int measureDistance()
 {
   digitalWrite(TRIG_PIN, LOW);
@@ -50,43 +50,48 @@ void setup()
   Serial.begin(115200);
   Serial.println("\n--------------------------------");
   Serial.println("idle, wifi_on, sensor_reading, transmission, distance");
-  unsigned long endIdle = micros();
-  Serial.print(String(endIdle - startIdle) + ","); // Timestamp to boot and idle
 
-  // Turn on WiFi
-  WiFi.mode(WIFI_STA);
-  esp_now_init();
-
-  // Initialize the HC-SR04 pins
+  // Initialize the sensor
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  // Set the peer info
-  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
-  peerInfo.channel = 0;
-  peerInfo.encrypt = false;
-  esp_now_add_peer(&peerInfo);
-
-  // WiFi is not turned off, but it transitions to read_sensor state.
-  unsigned long endWiFiOn = micros();
-  Serial.print(String(endWiFiOn - endIdle) + ","); // Timestamp to turn on WiFi
+  // Measure the idle time
+  unsigned long endIdle = micros();
+  Serial.print(String(endIdle - startIdle) + ","); // Timestamp to boot and idle
 
   // Measure the distance
   int distance = measureDistance();
+
+  // Measure the time to read the sensor
   unsigned long endReadSensor = micros();
-  Serial.print(String(endReadSensor - endWiFiOn) + ","); // Timestamp to read the sensor
+  Serial.print(String(endReadSensor - endIdle) + ","); // Timestamp to read the sensor
+
+  // Turn on WiFi
+  WiFi.mode(WIFI_STA); // Station mode
+  esp_now_init();      // Initialize ESP-NOW
+
+  // Set the peer info
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6); // Copy the MAC address
+  peerInfo.channel = 0;                            // Set the channel
+  peerInfo.encrypt = false;                        // No encryption
+  esp_now_add_peer(&peerInfo);                     // Add the peer
+
+  // Measure the time to turn on WiFi
+  unsigned long endWiFiOn = micros();
+  Serial.print(String(endWiFiOn - endReadSensor) + ","); // Timestamp to turn on WiFi
 
   // Send the message
   String status = distance < DISTANCE_THRESHOLD ? "Occupied" : "Free";        // Determine the status
   esp_now_send(broadcastAddress, (uint8_t *)status.c_str(), status.length()); // Send the status
 
-  unsigned long endTransmission = micros();                     // Timestamp after sending
-  Serial.print(String(endTransmission - endReadSensor) + ", "); // Timestamp to send the message
-  Serial.print(String(distance) + ", ");                        // Print the distance
+  // Measure the time to send the message
+  unsigned long endTransmission = micros();
+  Serial.print(String(endTransmission - endWiFiOn) + ", "); // Timestamp to send the message
+  Serial.println(String(distance) + ", ");                  // Print the distance
 
   // // Prepare to sleep
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-  Serial.println("\nDeep Sleep Time: \t " + String(TIME_TO_SLEEP * uS_TO_S_FACTOR) + " us");
+  Serial.println("Deep Sleep Time: \t " + String(TIME_TO_SLEEP * uS_TO_S_FACTOR) + " us");
   Serial.println("--------------------------------\n");
   Serial.flush();
   esp_deep_sleep_start();
