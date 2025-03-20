@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parse(
         [
             [
-                os.path.join(script_dir, "instructions", "deep_sleep.csv"),
+                os.path.join(script_dir, "data", "deep_sleep.csv"),
                 [
                     {"name": "Deep-Sleep", "range": [0, 100]},
                     {"name": "Idle", "range": [300, 350]},
@@ -68,14 +68,14 @@ if __name__ == "__main__":
                 ],
             ],
             [
-                os.path.join(script_dir, "instructions", "sensor_read.csv"),
+                os.path.join(script_dir, "data", "sensor_read.csv"),
                 [
                     {"name": "Sensor Read", "range": [460, 470]},
                     {"name": "Idle", "range": [330, 340]},
                 ],
             ],
             [
-                os.path.join(script_dir, "instructions", "transmission_power.csv"),
+                os.path.join(script_dir, "data", "transmission_power.csv"),
                 [
                     {"name": "Wi-Fi on", "range": [680, 720]},
                     {"name": "Transmission at 2 dBm", "range": [750, 850]},

@@ -1,3 +1,5 @@
+Power Consumption Analysis
+==========================
 | State                    |   Average Power Consumption (mW) |
 |--------------------------|----------------------------------|
 | Deep-Sleep               |                          59.6609 |
@@ -8,6 +10,8 @@
 | Transmission at 19.5 dBm |                        1221.76   |
 
 
+Sink Positioning Analysis
+=========================
 Shortest sensor lifetime: 3.40 transmission cycles, which means the lifetime of the system is 3 full transmission cycles.
 Worst-case sensor with fixed sink position: Sensor nr 1 with positions [1 2]
 Optimal sink position: (6.87, 7.66)
