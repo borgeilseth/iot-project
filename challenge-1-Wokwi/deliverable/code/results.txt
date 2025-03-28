@@ -1,0 +1,18 @@
+Power Consumption Analysis
+==========================
+| State                    |   Average Power Consumption (mW) |
+|--------------------------|----------------------------------|
+| Deep-Sleep               |                          59.6609 |
+| Idle                     |                         320.906  |
+| Wi-Fi on                 |                         724.579  |
+| Sensor Read              |                         466.745  |
+| Transmission at 2 dBm    |                         797.294  |
+| Transmission at 19.5 dBm |                        1221.76   |
+
+
+Sink Positioning Analysis
+=========================
+Shortest sensor lifetime: 3.40 transmission cycles, which means the lifetime of the system is 3 full transmission cycles.
+Worst-case sensor with fixed sink position: Sensor nr 1 with positions [1 2]
+Optimal sink position: (6.87, 7.66)
+Worst-case sensor with optimal sink position: Sensor nr 4 with positions [15  7]
