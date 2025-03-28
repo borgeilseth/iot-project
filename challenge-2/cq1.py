@@ -38,5 +38,5 @@ def find_unsuccessful_coap_put_requests(pcap_file):
 
     print(f"RESULT: \nNumber of different Confirmable PUT requests with unsuccessful responses: {unsuccessful_responses_count}")
 
-pcap_file = "challenge2.pcapng"
+pcap_file = "challenge-2/challenge2.pcapng"
 find_unsuccessful_coap_put_requests(pcap_file)
