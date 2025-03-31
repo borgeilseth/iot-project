@@ -1,26 +1,24 @@
 import pyshark
 
-# Load pcap file
+"""
+How many different MQTT clients specify a last Will Message to be 
+directed to a topic having as first level "university"?
+"""
+
 pcap_file = "challenge-2/challenge2.pcapng"
 capture = pyshark.FileCapture(pcap_file, display_filter="mqtt")
 
-mqtt_subscribe = []
+mqtt_will = []
 for packet in capture:
-    mqtt_msgtype = int(packet.mqtt.get("mqtt.msgtype"))
-    mqtt_topic = packet.mqtt.get("mqtt.topic")
-    ip_dst = packet.ip.dst if hasattr(packet, "ip") else packet.ipv6.dst
-    if (
-        mqtt_msgtype == 8
-        and "#" in mqtt_topic
-        and ip_dst in ["35.158.43.69", "35.158.34.213", "18.192.151.104"]
-    ):
-        mqtt_subscribe.append(packet)
+    mqtt_willmsg = packet.mqtt.get("mqtt.willmsg")
+    mqtt_willtopic = packet.mqtt.get("mqtt.willtopic")
+    if mqtt_willmsg and mqtt_willtopic.startswith("university"):
+        mqtt_will.append(packet)
 
 capture.close()
 
-# Determine amound of unique clients
 unique_clients = set()
-for packet in mqtt_subscribe:
+for packet in mqtt_will:
     ip_src = packet.ip.src if hasattr(packet, "ip") else packet.ipv6.src
     is_ipv6 = hasattr(packet, "ipv6")
     tcp_src = packet.tcp.srcport
@@ -30,6 +28,6 @@ for packet in mqtt_subscribe:
         else:
             unique_clients.add(f"{ip_src}:{tcp_src}")
 
-# Print the number of unique clients
+
 print(f"Number of unique clients: {len(unique_clients)}")
 print(f"Unique clients:", unique_clients)
