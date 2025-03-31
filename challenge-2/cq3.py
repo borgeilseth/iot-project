@@ -1,35 +1,38 @@
 import pyshark
+from utils import unique_clients, extract_dns_ips
+
+PCAP_FILE = "challenge-2/challenge2.pcapng"
+HOSTNAME = "broker.hivemq.com"
+
+
+def main():
+    # Extract IPs from DNS packets
+    ips = extract_dns_ips(PCAP_FILE, HOSTNAME)
+
+    # Find MQTT subscribers
+    packets = find_mqtt_subscribers(PCAP_FILE, ips)
+
+    # Filter packets to find unique clients
+    clients = unique_clients(packets)
+
+    print(f"Number of unique clients: {len(clients)}")
+
 
 # Load pcap file
-pcap_file = "challenge-2/challenge2.pcapng"
-capture = pyshark.FileCapture(pcap_file, display_filter="mqtt")
+def find_mqtt_subscribers(pcap_file, ips):
+    capture = pyshark.FileCapture(pcap_file, display_filter="mqtt")
+    mqtt_subscribers = []
+    for packet in capture:
+        mqtt_msgtype = packet.mqtt.get("mqtt.msgtype")
+        mqtt_topic = packet.mqtt.get("mqtt.topic")
+        ip_dst = packet.ip.dst if hasattr(packet, "ip") else packet.ipv6.dst
 
-mqtt_subscribe = []
-for packet in capture:
-    mqtt_msgtype = int(packet.mqtt.get("mqtt.msgtype"))
-    mqtt_topic = packet.mqtt.get("mqtt.topic")
-    ip_dst = packet.ip.dst if hasattr(packet, "ip") else packet.ipv6.dst
-    if (
-        mqtt_msgtype == 8
-        and "#" in mqtt_topic
-        and ip_dst in ["35.158.43.69", "35.158.34.213", "18.192.151.104"]
-    ):
-        mqtt_subscribe.append(packet)
+        if mqtt_msgtype == "8" and "#" in mqtt_topic and ip_dst in ips:
+            mqtt_subscribers.append(packet)
 
-capture.close()
+    capture.close()
+    return mqtt_subscribers
 
-# Determine amound of unique clients
-unique_clients = set()
-for packet in mqtt_subscribe:
-    ip_src = packet.ip.src if hasattr(packet, "ip") else packet.ipv6.src
-    is_ipv6 = hasattr(packet, "ipv6")
-    tcp_src = packet.tcp.srcport
-    if ip_src:
-        if is_ipv6:
-            unique_clients.add(f"[{ip_src}]:{tcp_src}")
-        else:
-            unique_clients.add(f"{ip_src}:{tcp_src}")
 
-# Print the number of unique clients
-print(f"Number of unique clients: {len(unique_clients)}")
-print(f"Unique clients:", unique_clients)
+if __name__ == "__main__":
+    main()
