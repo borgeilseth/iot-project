@@ -1,18 +1,12 @@
 import pyshark
 
-"""
-How many different MQTT clients specify a last Will Message to be 
-directed to a topic having as first level "university"?
-"""
-
 pcap_file = "challenge-2/challenge2.pcapng"
 capture = pyshark.FileCapture(pcap_file, display_filter="mqtt")
 
 mqtt_will = []
 for packet in capture:
-    mqtt_willmsg = packet.mqtt.get("mqtt.willmsg")
     mqtt_willtopic = packet.mqtt.get("mqtt.willtopic")
-    if mqtt_willmsg and mqtt_willtopic.startswith("university"):
+    if mqtt_willtopic and mqtt_willtopic.startswith("university"):
         mqtt_will.append(packet)
 
 capture.close()
