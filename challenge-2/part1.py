@@ -133,7 +133,7 @@ def cq5(pcap_file) -> int:
 
     last_wills = []
     all_messages = []
-    sub_requests = []
+    non_wildcard_subscriptions = []
 
     for packet in capture:
         """
@@ -152,12 +152,12 @@ def cq5(pcap_file) -> int:
         mqtt_msgtype = packet.mqtt.get("mqtt.msgtype")
 
         # Find Connect packets with a last will
-        if mqtt_willtopic:
+        if mqtt_msgtype == "1" and mqtt_willtopic and mqtt_willmsg:
             last_wills.append((mqtt_willtopic, mqtt_willmsg))
 
         # Find Subscribe packets without wildcards
         if mqtt_msgtype == "8" and not any(char in mqtt_topic for char in ["#", "+"]):
-            sub_requests.append((mqtt_topic, src))  # (topic, subscriber)
+            non_wildcard_subscriptions.append((mqtt_topic, src))  # (topic, subscriber)
 
         # Find Publish packets
         if mqtt_msgtype == "3":
@@ -165,17 +165,19 @@ def cq5(pcap_file) -> int:
                 {
                     "topic": mqtt_topic,  # Topic of the message
                     "msg": mqtt_msg,  # Message content
-                    "dst": dst,  # Message recipient
+                    "client": dst,  # Message recipient
                 }
             )
     capture.close()
 
-    # Find number of messages matching last wills and subscriptions without wildcards
+    # Find number last will recipients that subscribed without wildcards
     return sum(
         1
         for message in all_messages
+        # Find messages that match the last will topic and message
         if (message["topic"], message["msg"]) in last_wills
-        and (message["topic"], message["dst"]) in sub_requests
+        # Make sure the recipient client is not a wildcard subscriber
+        and (message["topic"], message["client"]) in non_wildcard_subscriptions
     )
 
 
@@ -199,7 +201,7 @@ def cq7(pcap_file) -> int:
     display_filter = (
         "udp.port == 1885 or tcp.port == 1885"  # Search for any packet on port 1885
     )
-    # We find zero packets, so no reason to construct a more complex filter
+    # We find zero packets, so we wont have to filter for MQTT-SN packets
     capture = pyshark.FileCapture(pcap_file, display_filter=display_filter)
     mqttsn_messages = [packet for packet in capture]
     capture.close()
