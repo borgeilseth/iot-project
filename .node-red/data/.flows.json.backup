@@ -42,7 +42,7 @@
         "id": "be80048.8f232f8",
         "type": "mqtt in",
         "z": "87f0629c503e56cd",
-        "name": "id_generator",
+        "name": "Message from challenge3/id_generator",
         "topic": "challenge3/id_generator",
         "qos": "2",
         "datatype": "auto-detect",
@@ -50,36 +50,18 @@
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 130,
-        "y": 360,
+        "x": 190,
+        "y": 400,
         "wires": [
             [
-                "8640b8ff.f82ff8"
+                "3658587a2c4ef277"
             ]
         ]
-    },
-    {
-        "id": "8640b8ff.f82ff8",
-        "type": "debug",
-        "z": "87f0629c503e56cd",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 350,
-        "y": 360,
-        "wires": []
     },
     {
         "id": "42ecc01a5bd0645a",
         "type": "inject",
         "z": "87f0629c503e56cd",
-        "d": true,
         "name": "Every 5 seconds",
         "props": [
             {
@@ -94,7 +76,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 160,
+        "y": 200,
         "wires": [
             [
                 "de6b0c746b109e9b"
@@ -117,8 +99,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 650,
-        "y": 240,
+        "x": 670,
+        "y": 280,
         "wires": [
             [
                 "b8d2e93bea994708"
@@ -130,14 +112,14 @@
         "type": "file",
         "z": "87f0629c503e56cd",
         "name": "Save to id_log.csv",
-        "filename": "/output/id_log.csv",
+        "filename": "/files/id_log.csv",
         "filenameType": "str",
         "appendNewline": false,
         "createDir": true,
         "overwriteFile": "false",
         "encoding": "none",
         "x": 890,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "c9d33fd484c5b5b6"
@@ -149,15 +131,15 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Generate ID & Timestamp",
-        "func": "// Initialize counter\nlet count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n// Generate random ID (0-30000)\nlet id = Math.floor(Math.random() * 30001);\n\n// Get timestamp\nlet timestamp = msg.payload\n\n// Create payload\nmsg.payload = {id, timestamp, };\n\n// Create CSV data\nmsg.csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": msg.payload.timestamp\n};\n\nreturn msg;",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nlet id = Math.floor(Math.random() * 30000);\nlet timestamp = msg.payload\n\nmsg.payload = {id, timestamp, };\n\nmsg.csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": msg.payload.timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 160,
+        "x": 410,
+        "y": 200,
         "wires": [
             [
                 "d4e9d3c5.9a3c58",
@@ -179,8 +161,8 @@
         "correl": "",
         "expiry": "",
         "broker": "f269ad3f0c8a7866",
-        "x": 760,
-        "y": 160,
+        "x": 740,
+        "y": 200,
         "wires": []
     },
     {
@@ -203,7 +185,7 @@
         "to": "",
         "reg": false,
         "x": 420,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "b1f6cdaffbdbce80"
@@ -215,7 +197,7 @@
         "type": "debug",
         "z": "87f0629c503e56cd",
         "name": "debug 1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -224,14 +206,14 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1090,
-        "y": 240,
+        "y": 280,
         "wires": []
     },
     {
         "id": "inject-reset",
         "type": "inject",
         "z": "87f0629c503e56cd",
-        "name": "Reset File",
+        "name": "Initial flow",
         "props": [
             {
                 "p": "payload"
@@ -244,8 +226,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "str",
-        "x": 120,
-        "y": 620,
+        "x": 130,
+        "y": 60,
         "wires": [
             [
                 "file-reset"
@@ -256,15 +238,97 @@
         "id": "file-reset",
         "type": "file",
         "z": "87f0629c503e56cd",
-        "name": "Overwrite id_log.csv",
-        "filename": "/output/id_log.csv",
+        "name": "Clear id_log.csv",
+        "filename": "/files/id_log.csv",
         "filenameType": "str",
         "appendNewline": false,
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 360,
-        "y": 620,
+        "x": 380,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3658587a2c4ef277",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "ID modulo 7711",
+        "func": "msg.index = (msg.payload.id % 7711)\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 400,
+        "wires": [
+            [
+                "b8bada96dc61908c"
+            ]
+        ]
+    },
+    {
+        "id": "b8bada96dc61908c",
+        "type": "file in",
+        "z": "87f0629c503e56cd",
+        "name": "Read challenge3.csv",
+        "filename": "/files/challenge3.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 780,
+        "y": 400,
+        "wires": [
+            [
+                "a6867d70a032e0d3"
+            ]
+        ]
+    },
+    {
+        "id": "a6867d70a032e0d3",
+        "type": "csv",
+        "z": "87f0629c503e56cd",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "No.,Time,Source,Destination,Protocol,Length,Source Port,Destination Port,Info,Payload",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 450,
+        "y": 480,
+        "wires": [
+            [
+                "d483765df6d2adf3"
+            ]
+        ]
+    },
+    {
+        "id": "d483765df6d2adf3",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "Get frame",
+        "func": "\nmsg.payload = msg.payload[msg.index - 1]\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 480,
         "wires": [
             []
         ]

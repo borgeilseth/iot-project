@@ -18,7 +18,7 @@ services:
             - broker
         volumes:
             - ./.node-red/data:/data/
-            - ./.node-red/output:/output/
+            - ./.node-red/files:/files/
         user: '0'
         networks:
             - localnet
