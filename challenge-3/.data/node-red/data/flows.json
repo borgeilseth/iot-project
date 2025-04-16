@@ -79,6 +79,7 @@
         "id": "42ecc01a5bd0645a",
         "type": "inject",
         "z": "87f0629c503e56cd",
+        "d": true,
         "name": "Every 5 seconds",
         "props": [
             {
