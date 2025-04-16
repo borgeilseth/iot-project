@@ -3,9 +3,9 @@ services:
         image: eclipse-mosquitto
         container_name: broker
         volumes:
-            - ./.data/mqtt/config:/mosquitto/config
-            - ./.data/mqtt/data:/mosquitto/data
-            - ./.data/mqtt/log:/mosquitto/log
+            - ./.mqtt/config:/mosquitto/config
+            - ./.mqtt/data:/mosquitto/data
+            - ./.mqtt/log:/mosquitto/log
         networks:
             - localnet
         ports:
@@ -17,9 +17,8 @@ services:
         depends_on:
             - broker
         volumes:
-            - ./.data/node-red/data:/data/
-            - ./.data/node-red/output:/output
-
+            - ./.node-red/data:/data/
+            - ./.node-red/output:/output/
         user: '0'
         networks:
             - localnet
