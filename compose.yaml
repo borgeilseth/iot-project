@@ -12,7 +12,9 @@ services:
             - '1884:1884'
 
     node-red:
-        image: nodered/node-red
+        build:
+            context: .
+            dockerfile: ./.node-red/Dockerfile
         container_name: node-red
         depends_on:
             - broker
@@ -24,6 +26,8 @@ services:
             - localnet
         ports:
             - '1880:1880'
+        command:
+            - npm install node-red-dashboard
 
 networks:
     localnet:

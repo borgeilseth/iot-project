@@ -39,121 +39,6 @@
         "sessionExpiry": ""
     },
     {
-        "id": "adf93a0d66cd3be0",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "9633ce7eb7da70c6",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-light",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#0094CE",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#097479",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
-            },
-            "customTheme": {
-                "name": "Untitled Theme 1",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#0094CE",
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#0094CE",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#fafafa",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#1bbfff",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#0094ce",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
-                }
-            },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
-            }
-        },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 48,
-                "sy": 48,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
-        }
-    },
-    {
-        "id": "75faab950dbc0871",
-        "type": "ui_group",
-        "name": "Default",
-        "tab": "adf93a0d66cd3be0",
-        "order": 1,
-        "disp": true,
-        "width": 6,
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "be80048.8f232f8",
         "type": "mqtt in",
         "z": "87f0629c503e56cd",
@@ -605,8 +490,7 @@
         "y": 640,
         "wires": [
             [
-                "68f8f7a04a6dcce4",
-                "16e527aa3bbf973a"
+                "68f8f7a04a6dcce4"
             ]
         ]
     },
@@ -615,7 +499,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Build CSV",
-        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload.payload\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload.payload\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": 0, \n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -677,7 +561,7 @@
         "type": "debug",
         "z": "87f0629c503e56cd",
         "name": "debug 1",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -686,87 +570,6 @@
         "statusType": "auto",
         "x": 800,
         "y": 760,
-        "wires": []
-    },
-    {
-        "id": "41359398dad2863c",
-        "type": "ui_chart",
-        "z": "87f0629c503e56cd",
-        "name": "",
-        "group": "75faab950dbc0871",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "label": "chart",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": true,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": true,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 990,
-        "y": 640,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "16e527aa3bbf973a",
-        "type": "function",
-        "z": "87f0629c503e56cd",
-        "name": "function 1",
-        "func": "\nconst { range } = msg.payload.payload\nmsg.topic = \"plot\"\nmsg.payload = (range[0] + range[1]) / 2\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 800,
-        "y": 640,
-        "wires": [
-            [
-                "41359398dad2863c",
-                "fcaf1fc8053ba5c4"
-            ]
-        ]
-    },
-    {
-        "id": "fcaf1fc8053ba5c4",
-        "type": "debug",
-        "z": "87f0629c503e56cd",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 600,
         "wires": []
     }
 ]

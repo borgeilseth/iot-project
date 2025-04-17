@@ -39,6 +39,121 @@
         "sessionExpiry": ""
     },
     {
+        "id": "adf93a0d66cd3be0",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "9633ce7eb7da70c6",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "75faab950dbc0871",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "adf93a0d66cd3be0",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "be80048.8f232f8",
         "type": "mqtt in",
         "z": "87f0629c503e56cd",
@@ -51,7 +166,7 @@
         "rap": false,
         "inputs": 0,
         "x": 190,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "3658587a2c4ef277"
@@ -76,7 +191,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 200,
+        "y": 180,
         "wires": [
             [
                 "de6b0c746b109e9b"
@@ -100,7 +215,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 670,
-        "y": 280,
+        "y": 240,
         "wires": [
             [
                 "b8d2e93bea994708"
@@ -119,11 +234,9 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 890,
-        "y": 280,
+        "y": 240,
         "wires": [
-            [
-                "c9d33fd484c5b5b6"
-            ]
+            []
         ]
     },
     {
@@ -138,8 +251,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
-        "y": 200,
+        "x": 430,
+        "y": 180,
         "wires": [
             [
                 "d4e9d3c5.9a3c58",
@@ -162,7 +275,7 @@
         "expiry": "",
         "broker": "f269ad3f0c8a7866",
         "x": 740,
-        "y": 200,
+        "y": 180,
         "wires": []
     },
     {
@@ -184,30 +297,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
-        "y": 280,
+        "x": 460,
+        "y": 240,
         "wires": [
             [
                 "b1f6cdaffbdbce80"
             ]
         ]
-    },
-    {
-        "id": "c9d33fd484c5b5b6",
-        "type": "debug",
-        "z": "87f0629c503e56cd",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1090,
-        "y": 280,
-        "wires": []
     },
     {
         "id": "inject-reset",
@@ -245,26 +341,28 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 380,
+        "x": 360,
         "y": 60,
         "wires": [
-            []
+            [
+                "2b3f27973c014084"
+            ]
         ]
     },
     {
         "id": "3658587a2c4ef277",
         "type": "function",
         "z": "87f0629c503e56cd",
-        "name": "ID modulo 7711",
-        "func": "msg.index = (msg.payload.id % 7711)\nreturn msg",
+        "name": "Set msg.id modulo 7711",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n\n// Get index, 0 gets defaulted to 7711\nmsg.id = msg.payload.id\nmsg.n = (msg.id % 7711) || 7711\n\nreturn msg",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
-        "y": 400,
+        "x": 530,
+        "y": 380,
         "wires": [
             [
                 "b8bada96dc61908c"
@@ -283,8 +381,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 780,
-        "y": 400,
+        "x": 800,
+        "y": 380,
         "wires": [
             [
                 "a6867d70a032e0d3"
@@ -295,7 +393,7 @@
         "id": "a6867d70a032e0d3",
         "type": "csv",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "CSV to Object",
         "spec": "rfc",
         "sep": ",",
         "hdrin": true,
@@ -307,8 +405,8 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 450,
-        "y": 480,
+        "x": 560,
+        "y": 440,
         "wires": [
             [
                 "d483765df6d2adf3"
@@ -319,19 +417,110 @@
         "id": "d483765df6d2adf3",
         "type": "function",
         "z": "87f0629c503e56cd",
-        "name": "Get frame",
-        "func": "\nmsg.payload = msg.payload[msg.index - 1]\n\nreturn msg;",
+        "name": "Get frame at index",
+        "func": "\nmsg.payload = msg.payload[msg.n - 1]\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 480,
+        "x": 790,
+        "y": 440,
+        "wires": [
+            [
+                "e220fb3bc9e26e38"
+            ]
+        ]
+    },
+    {
+        "id": "e220fb3bc9e26e38",
+        "type": "switch",
+        "z": "87f0629c503e56cd",
+        "name": "",
+        "property": "payload.Info",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "Publish Message",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "Ack",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 250,
+        "y": 540,
+        "wires": [
+            [
+                "095ba3435a71a81c"
+            ],
+            [
+                "65237a136a23da45"
+            ]
+        ]
+    },
+    {
+        "id": "65237a136a23da45",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "Parse MQTT Ack",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 820,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "095ba3435a71a81c",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "Parse MQTT Publish",
+        "func": "const { Info, Payload} = msg.payload;\n\n// Extract topics\nconst topics = Info.split(\",\")\n    .map(str => str.match(/\\[(.*?)\\]/)?.[1]?.trim())\n    .filter(Boolean);\n\n// Parse payloads\nlet payloads = []\ntry {\n    payloads = JSON.parse(`[${Payload}]`)\n} catch (_) {\n    return\n};\n\n// Build messages\nconst msgs = topics.map((e, i) => ({\n    \"topic\": e,\n    \"payload\": {\n        \"timestamp\": Date.now(),\n        \"id\": msg.id,\n        \"payload\": payloads[i] ?? null,\n    }\n}));\n\n\nreturn [msgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 560,
+        "wires": [
+            [
+                "eaba2ec243a7ae22"
+            ]
+        ]
+    },
+    {
+        "id": "be010638d3139df9",
+        "type": "mqtt out",
+        "z": "87f0629c503e56cd",
+        "name": "Publish to topic",
+        "topic": "",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "f269ad3f0c8a7866",
+        "x": 980,
+        "y": 560,
+        "wires": []
     },
     {
         "id": "eaba2ec243a7ae22",
@@ -350,10 +539,234 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 580,
-        "y": 580,
+        "x": 740,
+        "y": 560,
+        "wires": [
+            [
+                "be010638d3139df9",
+                "a1110c22c755580b"
+            ]
+        ]
+    },
+    {
+        "id": "2b3f27973c014084",
+        "type": "file",
+        "z": "87f0629c503e56cd",
+        "name": "Clear filtered_pubs.csv",
+        "filename": "/files/filtered_pubs.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 600,
+        "y": 60,
+        "wires": [
+            [
+                "21c8d6a4a4f77859"
+            ]
+        ]
+    },
+    {
+        "id": "21c8d6a4a4f77859",
+        "type": "file",
+        "z": "87f0629c503e56cd",
+        "name": "Clear ack_log.csv",
+        "filename": "/files/ack_log.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 850,
+        "y": 60,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "a1110c22c755580b",
+        "type": "switch",
+        "z": "87f0629c503e56cd",
+        "name": "Check if Fahrenheit",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "jsonata_exp",
+                "v": "payload.payload.type = \"temperature\" and payload.payload.unit = \"F\"",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 550,
+        "y": 640,
+        "wires": [
+            [
+                "68f8f7a04a6dcce4",
+                "16e527aa3bbf973a"
+            ]
+        ]
+    },
+    {
+        "id": "68f8f7a04a6dcce4",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "Build CSV",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload.payload\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 700,
+        "wires": [
+            [
+                "9ac56a97b2f9583d",
+                "35779b5fb31ab372"
+            ]
+        ]
+    },
+    {
+        "id": "9ac56a97b2f9583d",
+        "type": "csv",
+        "z": "87f0629c503e56cd",
+        "name": "Format CSV",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "once",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "No.,LONG,LAT,MEAN_VALUE,TYPE,UNIT,DESCRIPTION",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 810,
+        "y": 700,
+        "wires": [
+            [
+                "4b3414e873390f33"
+            ]
+        ]
+    },
+    {
+        "id": "4b3414e873390f33",
+        "type": "file",
+        "z": "87f0629c503e56cd",
+        "name": "Save to filtered_pubs.csv",
+        "filename": "/files/filtered_pubs.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1050,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "35779b5fb31ab372",
+        "type": "debug",
+        "z": "87f0629c503e56cd",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "41359398dad2863c",
+        "type": "ui_chart",
+        "z": "87f0629c503e56cd",
+        "name": "",
+        "group": "75faab950dbc0871",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": true,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 990,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "16e527aa3bbf973a",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "function 1",
+        "func": "\nconst { range } = msg.payload.payload\nmsg.topic = \"chart\"\nmsg.payload = (range[0] + range[1]) / 2\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 640,
+        "wires": [
+            [
+                "41359398dad2863c",
+                "fcaf1fc8053ba5c4"
+            ]
+        ]
+    },
+    {
+        "id": "fcaf1fc8053ba5c4",
+        "type": "debug",
+        "z": "87f0629c503e56cd",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 600,
+        "wires": []
     }
 ]
