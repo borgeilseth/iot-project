@@ -55,7 +55,8 @@
                 "default": "#0094CE",
                 "baseColor": "#0094CE",
                 "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": false
+                "edited": true,
+                "reset": false
             },
             "darkTheme": {
                 "default": "#097479",
@@ -149,7 +150,7 @@
         "tab": "adf93a0d66cd3be0",
         "order": 1,
         "disp": true,
-        "width": 6,
+        "width": "12",
         "collapse": false,
         "className": ""
     },
@@ -244,7 +245,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Generate ID & Timestamp",
-        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nlet id = Math.floor(Math.random() * 30000);\nlet timestamp = msg.payload\n\nmsg.payload = {id, timestamp, };\n\nmsg.csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": msg.payload.timestamp\n};\n\nreturn msg;",
+        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nlet id = Math.floor(Math.random() * 30000);\nlet timestamp = msg.payload\n\nmsg.payload = {id, timestamp, };\n\nmsg.csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": msg.payload.timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -459,7 +460,7 @@
         "y": 540,
         "wires": [
             [
-                "095ba3435a71a81c"
+                "eaba2ec243a7ae22"
             ],
             [
                 "65237a136a23da45"
@@ -479,7 +480,7 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 820,
+        "y": 900,
         "wires": [
             []
         ]
@@ -496,11 +497,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
-        "y": 560,
+        "x": 760,
+        "y": 600,
         "wires": [
             [
-                "eaba2ec243a7ae22"
+                "be010638d3139df9",
+                "a1110c22c755580b"
             ]
         ]
     },
@@ -518,15 +520,15 @@
         "correl": "",
         "expiry": "",
         "broker": "f269ad3f0c8a7866",
-        "x": 980,
-        "y": 560,
+        "x": 1000,
+        "y": 600,
         "wires": []
     },
     {
         "id": "eaba2ec243a7ae22",
         "type": "delay",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "Limit to 4 msgs/min",
         "pauseType": "rate",
         "timeout": "5",
         "timeoutUnits": "seconds",
@@ -539,12 +541,11 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 740,
-        "y": 560,
+        "x": 500,
+        "y": 600,
         "wires": [
             [
-                "be010638d3139df9",
-                "a1110c22c755580b"
+                "095ba3435a71a81c"
             ]
         ]
     },
@@ -602,7 +603,7 @@
         "repair": false,
         "outputs": 1,
         "x": 550,
-        "y": 640,
+        "y": 660,
         "wires": [
             [
                 "68f8f7a04a6dcce4",
@@ -615,7 +616,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Build CSV",
-        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload.payload\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
+        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload?.payload || {}\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -623,7 +624,7 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
                 "9ac56a97b2f9583d",
@@ -648,7 +649,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 810,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
                 "4b3414e873390f33"
@@ -667,7 +668,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 1050,
-        "y": 700,
+        "y": 720,
         "wires": [
             []
         ]
@@ -685,7 +686,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 800,
-        "y": 760,
+        "y": 780,
         "wires": []
     },
     {
@@ -695,8 +696,8 @@
         "name": "",
         "group": "75faab950dbc0871",
         "order": 0,
-        "width": 0,
-        "height": 0,
+        "width": "12",
+        "height": "8",
         "label": "chart",
         "chartType": "line",
         "legend": "false",
@@ -726,8 +727,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 990,
-        "y": 640,
+        "x": 1050,
+        "y": 660,
         "wires": [
             []
         ]
@@ -736,37 +737,40 @@
         "id": "16e527aa3bbf973a",
         "type": "function",
         "z": "87f0629c503e56cd",
-        "name": "function 1",
-        "func": "\nconst { range } = msg.payload.payload\nmsg.topic = \"chart\"\nmsg.payload = (range[0] + range[1]) / 2\n\nreturn msg;",
+        "name": "Get mean value for plotting",
+        "func": "\nconst { range } = msg.payload.payload\nmsg.payload = (range[0] + range[1]) / 2\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 640,
+        "x": 820,
+        "y": 660,
         "wires": [
             [
-                "41359398dad2863c",
-                "fcaf1fc8053ba5c4"
+                "41359398dad2863c"
             ]
         ]
     },
     {
-        "id": "fcaf1fc8053ba5c4",
-        "type": "debug",
+        "id": "2b3aea713b6c1c40",
+        "type": "comment",
         "z": "87f0629c503e56cd",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 600,
+        "name": "MQTT Publish Messages Flow",
+        "info": "",
+        "x": 500,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "4919ee8dcb78b6b9",
+        "type": "comment",
+        "z": "87f0629c503e56cd",
+        "name": "MQTT Publish Messages Flow",
+        "info": "",
+        "x": 500,
+        "y": 860,
         "wires": []
     }
 ]
