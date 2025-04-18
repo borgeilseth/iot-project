@@ -192,7 +192,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 180,
+        "y": 200,
         "wires": [
             [
                 "de6b0c746b109e9b"
@@ -216,7 +216,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 670,
-        "y": 240,
+        "y": 260,
         "wires": [
             [
                 "b8d2e93bea994708"
@@ -235,7 +235,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 890,
-        "y": 240,
+        "y": 260,
         "wires": [
             []
         ]
@@ -245,7 +245,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Generate ID & Timestamp",
-        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nlet id = Math.floor(Math.random() * 30000);\nlet timestamp = msg.payload\n\nmsg.payload = {id, timestamp, };\n\nmsg.csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": msg.payload.timestamp\n};\n\nreturn msg;",
+        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nconst id = Math.floor(Math.random() * 30000);\nconst timestamp = msg.payload\n\nconst payload = { id, timestamp };\n\nconst csv = {\n    \"No.\": count,\n    \"ID\": id,\n    \"TIMESTAMP\": timestamp\n};\n\nreturn { payload, csv };",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -253,7 +253,7 @@
         "finalize": "",
         "libs": [],
         "x": 430,
-        "y": 180,
+        "y": 200,
         "wires": [
             [
                 "d4e9d3c5.9a3c58",
@@ -276,14 +276,14 @@
         "expiry": "",
         "broker": "f269ad3f0c8a7866",
         "x": 740,
-        "y": 180,
+        "y": 200,
         "wires": []
     },
     {
         "id": "9694a64da7377d64",
         "type": "change",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "Copy msg.csv",
         "rules": [
             {
                 "t": "move",
@@ -299,7 +299,7 @@
         "to": "",
         "reg": false,
         "x": 460,
-        "y": 240,
+        "y": 260,
         "wires": [
             [
                 "b1f6cdaffbdbce80"
@@ -327,7 +327,8 @@
         "y": 60,
         "wires": [
             [
-                "file-reset"
+                "file-reset",
+                "c6070f850cd332e3"
             ]
         ]
     },
@@ -354,19 +355,19 @@
         "id": "3658587a2c4ef277",
         "type": "function",
         "z": "87f0629c503e56cd",
-        "name": "Set msg.id modulo 7711",
-        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n\n// Get index, 0 gets defaulted to 7711\nmsg.id = msg.payload.id\nmsg.n = (msg.id % 7711) || 7711\n\nreturn msg",
+        "name": "Find N = id modulo 7711",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n// Get index, 0 gets defaulted to 7711\nconst id = msg.payload.id\nconst n = (id % 7711) || 7711\n\n// Stop after 80 messages\nconst stop = count > 80 ? true : false\n\nreturn { id, n, stop, count }",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
+        "x": 510,
         "y": 380,
         "wires": [
             [
-                "b8bada96dc61908c"
+                "1e1516c42d55a871"
             ]
         ]
     },
@@ -382,7 +383,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 800,
+        "x": 980,
         "y": 380,
         "wires": [
             [
@@ -419,7 +420,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Get frame at index",
-        "func": "\nmsg.payload = msg.payload[msg.n - 1]\n\nreturn msg;",
+        "func": "\nconst { id, n, payload} = msg\nreturn { \n    id,\n    n,\n    payload: payload[n - 1]\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -438,7 +439,7 @@
         "id": "e220fb3bc9e26e38",
         "type": "switch",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "Publish or Ack",
         "property": "payload.Info",
         "propertyType": "msg",
         "rules": [
@@ -456,7 +457,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 250,
+        "x": 220,
         "y": 540,
         "wires": [
             [
@@ -472,7 +473,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Parse MQTT Ack",
-        "func": "\nreturn msg;",
+        "func": "let ack_counter = global.get(\"ack_counter\") ?? 0\nglobal.set(\"ack_counter\", ++ack_counter)\n\nconst type = msg.payload.Info\n    .replace(/\\s*[\\(\\[].*?[\\)\\]]/g, '').trim();\n\nconst payload = {\n    \"No.\": ack_counter,\n    \"TIMESTAMP\": Date.now(),\n    \"SUB_ID\": msg.id,\n    \"MSG_TYPE\": type,\n}\n\nreturn { payload };",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -480,9 +481,12 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 900,
+        "y": 860,
         "wires": [
-            []
+            [
+                "a1f6ec1b78909b4e",
+                "9794763d8354014b"
+            ]
         ]
     },
     {
@@ -616,7 +620,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Build CSV",
-        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload?.payload || {}\n\nmsg.payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\n\nreturn msg;",
+        "func": "let count = context.get('count') ?? 0;\ncontext.set('count', ++count);\n\nconst { \n    description,\n    unit,\n    type,\n    range,\n    lat,\n    long,\n} = msg.payload?.payload || {}\n\nconst payload = {\n    \"No.\": count,\n    \"LONG\": long,\n    \"LAT\": lat,\n    \"MEAN_VALUE\": (range[0] + range[1]) / 2,\n    \"TYPE\": type,\n    \"UNIT\": unit, \n    \"DESCRIPTION\": description\n}\nreturn { payload }",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -627,8 +631,7 @@
         "y": 720,
         "wires": [
             [
-                "9ac56a97b2f9583d",
-                "35779b5fb31ab372"
+                "9ac56a97b2f9583d"
             ]
         ]
     },
@@ -674,31 +677,15 @@
         ]
     },
     {
-        "id": "35779b5fb31ab372",
-        "type": "debug",
-        "z": "87f0629c503e56cd",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 800,
-        "y": 780,
-        "wires": []
-    },
-    {
         "id": "41359398dad2863c",
         "type": "ui_chart",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "Plot Temperature",
         "group": "75faab950dbc0871",
         "order": 0,
         "width": "12",
         "height": "8",
-        "label": "chart",
+        "label": "",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -707,7 +694,7 @@
         "dot": true,
         "ymin": "",
         "ymax": "",
-        "removeOlder": 1,
+        "removeOlder": "1",
         "removeOlderPoints": "",
         "removeOlderUnit": "3600",
         "cutout": 0,
@@ -727,7 +714,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 1050,
+        "x": 1070,
         "y": 660,
         "wires": [
             []
@@ -738,7 +725,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Get mean value for plotting",
-        "func": "\nconst { range } = msg.payload.payload\nmsg.payload = (range[0] + range[1]) / 2\n\nreturn msg;",
+        "func": "\nconst { range } = msg.payload.payload\nconst payload = (range[0] + range[1]) / 2\n\nreturn { payload };",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -757,9 +744,9 @@
         "id": "2b3aea713b6c1c40",
         "type": "comment",
         "z": "87f0629c503e56cd",
-        "name": "MQTT Publish Messages Flow",
+        "name": "MQTT Publish Messages",
         "info": "",
-        "x": 500,
+        "x": 490,
         "y": 560,
         "wires": []
     },
@@ -767,10 +754,139 @@
         "id": "4919ee8dcb78b6b9",
         "type": "comment",
         "z": "87f0629c503e56cd",
-        "name": "MQTT Publish Messages Flow",
+        "name": "MQTT Ack Messages",
         "info": "",
-        "x": 500,
-        "y": 860,
+        "x": 480,
+        "y": 820,
         "wires": []
+    },
+    {
+        "id": "a1f6ec1b78909b4e",
+        "type": "csv",
+        "z": "87f0629c503e56cd",
+        "name": "Format CSV",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "once",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "No.,TIMESTAMP,SUB_ID,MSG_TYPE",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 710,
+        "y": 860,
+        "wires": [
+            [
+                "f5c28cf956d387c5"
+            ]
+        ]
+    },
+    {
+        "id": "f5c28cf956d387c5",
+        "type": "file",
+        "z": "87f0629c503e56cd",
+        "name": "Save to ack_log.csv",
+        "filename": "/files/ack_log.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 940,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "18b964590d651e3b",
+        "type": "http request",
+        "z": "87f0629c503e56cd",
+        "name": "Send Request",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "query",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 940,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9794763d8354014b",
+        "type": "function",
+        "z": "87f0629c503e56cd",
+        "name": "Build Request",
+        "func": "\nconst url = \"https://api.thingspeak.com/update\"\nconst payload = {\n    api_key: \"0F0DED1P9JDCOQL3\",\n    field1: global.get(\"ack_counter\")\n}\n\nreturn { url, payload };",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 920,
+        "wires": [
+            [
+                "18b964590d651e3b"
+            ]
+        ]
+    },
+    {
+        "id": "1e1516c42d55a871",
+        "type": "switch",
+        "z": "87f0629c503e56cd",
+        "name": "Stop after 80",
+        "property": "stop",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 380,
+        "wires": [
+            [
+                "b8bada96dc61908c"
+            ]
+        ]
+    },
+    {
+        "id": "c6070f850cd332e3",
+        "type": "change",
+        "z": "87f0629c503e56cd",
+        "name": "Delete global.ack_counter",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "ack_counter",
+                "pt": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 100,
+        "wires": [
+            []
+        ]
     }
 ]
