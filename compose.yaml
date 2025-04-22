@@ -22,6 +22,8 @@ services:
             - ./.node-red/data:/data/
             - ./.node-red/files:/files/
         user: '0'
+        environment:
+            - TZ=Europe/Rome
         networks:
             - localnet
         ports:

@@ -283,7 +283,7 @@
         "id": "9694a64da7377d64",
         "type": "change",
         "z": "87f0629c503e56cd",
-        "name": "",
+        "name": "Copy msg.csv",
         "rules": [
             {
                 "t": "move",
@@ -355,7 +355,7 @@
         "id": "3658587a2c4ef277",
         "type": "function",
         "z": "87f0629c503e56cd",
-        "name": "Find N = id modulo 7711",
+        "name": "Calculate N",
         "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n// Get index, 0 gets defaulted to 7711\nconst id = msg.payload.id\nconst n = (id % 7711) || 7711\n\n// Stop after 80 messages\nconst stop = count > 80 ? true : false\n\nreturn { id, n, stop, count }",
         "outputs": 1,
         "timeout": 0,
@@ -363,7 +363,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 470,
         "y": 380,
         "wires": [
             [
@@ -383,7 +383,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 980,
+        "x": 860,
         "y": 380,
         "wires": [
             [
@@ -431,7 +431,8 @@
         "y": 440,
         "wires": [
             [
-                "e220fb3bc9e26e38"
+                "e220fb3bc9e26e38",
+                "7ab9ecfcebef18ce"
             ]
         ]
     },
@@ -461,7 +462,7 @@
         "y": 540,
         "wires": [
             [
-                "eaba2ec243a7ae22"
+                "095ba3435a71a81c"
             ],
             [
                 "65237a136a23da45"
@@ -501,12 +502,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
+        "x": 500,
         "y": 600,
         "wires": [
             [
-                "be010638d3139df9",
-                "a1110c22c755580b"
+                "eaba2ec243a7ae22"
             ]
         ]
     },
@@ -545,11 +545,12 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 500,
+        "x": 760,
         "y": 600,
         "wires": [
             [
-                "095ba3435a71a81c"
+                "a1110c22c755580b",
+                "be010638d3139df9"
             ]
         ]
     },
@@ -685,7 +686,7 @@
         "order": 0,
         "width": "12",
         "height": "8",
-        "label": "",
+        "label": "Temperature",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -695,7 +696,7 @@
         "ymin": "",
         "ymax": "",
         "removeOlder": "1",
-        "removeOlderPoints": "",
+        "removeOlderPoints": "100",
         "removeOlderUnit": "3600",
         "cutout": 0,
         "useOneColor": false,
@@ -858,7 +859,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 750,
+        "x": 650,
         "y": 380,
         "wires": [
             [
@@ -876,6 +877,13 @@
                 "t": "delete",
                 "p": "ack_counter",
                 "pt": "global"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "100",
+                "tot": "num"
             }
         ],
         "action": "",
@@ -888,5 +896,22 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "7ab9ecfcebef18ce",
+        "type": "debug",
+        "z": "87f0629c503e56cd",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.Info",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 520,
+        "wires": []
     }
 ]
