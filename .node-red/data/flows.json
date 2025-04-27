@@ -356,7 +356,7 @@
         "type": "function",
         "z": "87f0629c503e56cd",
         "name": "Calculate N",
-        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n// Get index, 0 gets defaulted to 7711\nconst id = msg.payload.id\nconst n = (id % 7711) || 7711\n\n// Stop after 80 messages\nconst stop = count > 80 ? true : false\n\nreturn { id, n, stop, count }",
+        "func": "let count = context.get('count') || 0;\ncount += 1;\ncontext.set('count', count);\n\n// Get index, 0 gets defaulted to 7711\nconst id = msg.payload.id\nconst n = (id % 7711) || 7711\n\nreturn { id, n, count }",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -383,7 +383,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 860,
+        "x": 920,
         "y": 380,
         "wires": [
             [
@@ -431,8 +431,7 @@
         "y": 440,
         "wires": [
             [
-                "e220fb3bc9e26e38",
-                "7ab9ecfcebef18ce"
+                "e220fb3bc9e26e38"
             ]
         ]
     },
@@ -848,18 +847,20 @@
         "id": "1e1516c42d55a871",
         "type": "switch",
         "z": "87f0629c503e56cd",
-        "name": "Stop after 80",
-        "property": "stop",
+        "name": "Continue if under 80",
+        "property": "count",
         "propertyType": "msg",
         "rules": [
             {
-                "t": "false"
+                "t": "lte",
+                "v": "80",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 650,
+        "x": 680,
         "y": 380,
         "wires": [
             [
@@ -896,22 +897,5 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "7ab9ecfcebef18ce",
-        "type": "debug",
-        "z": "87f0629c503e56cd",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.Info",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1020,
-        "y": 520,
-        "wires": []
     }
 ]
